@@ -16,7 +16,8 @@ auth_url_discord = "https://discord.com/oauth2/authorize?client_id=1243122055063
 
 @login_required(login_url="/oauth2/login")
 def get_authenticated_user(request: HttpRequest):
-    return JsonResponse({"msg": "authenticated"})
+    return JsonResponse({"msg": f"Authenticated user: {request.user.username}"})
+
 
 
 def discord_login(request: HttpRequest):
