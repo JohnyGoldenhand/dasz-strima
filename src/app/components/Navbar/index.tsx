@@ -7,8 +7,11 @@ export const Navbar = () => {
             <SignedOut>
                 <SignInButton/>
             </SignedOut>
-            <SignedIn>
-                <UserButton/>
+            <SignedIn
+            >
+                <div className={"h-10 w-10"}>
+                    <UserButton/>
+                </div>
             </SignedIn>
         </nav>
     );
