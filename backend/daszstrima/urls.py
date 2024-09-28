@@ -15,9 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 from dclogin import views as dclogin_views
+from graphene_django.views import GraphQLView
+from daszstrima.schema import schema
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +31,6 @@ urlpatterns = [
     ),
     path("auth/user/", dclogin_views.get_authenticated_user, name="get_authenticated_user"),
     path("logout/", LogoutView.as_view(next_page="/"), name="logout"),
+
+    path("graphql/", GraphQLView.as_view(graphiql=True, schema=schema)),
 ]
