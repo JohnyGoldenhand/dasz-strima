@@ -3,14 +3,15 @@
 import graphene
 
 import films.schema
+import ratings.schema
 
 
-class Query(films.schema.Query, graphene.ObjectType):
+class Query(films.schema.Query, ratings.schema.Query, graphene.ObjectType):
     # Combine the queries from different apps
     pass
 
 
-class Mutation(films.schema.Mutation, graphene.ObjectType):
+class Mutation(films.schema.Mutation, ratings.schema.Mutation, graphene.ObjectType):
     # Combine the mutations from different apps
     pass
 
