@@ -19,7 +19,6 @@ def get_authenticated_user(request: HttpRequest):
     return JsonResponse({"msg": f"Authenticated user: {request.user.username}"})
 
 
-
 def discord_login(request: HttpRequest):
     return redirect(auth_url_discord)
 
@@ -35,6 +34,8 @@ def discord_login_redirect(request: HttpRequest):
         new_user = DiscordUser.objects.create(
             user_id=normal_user,
             discord_username=user_info["global_name"],
+            discord_id=user_info["id"],
+            avatar=user_info["avatar"],
         )
         new_user.save()
     else:
