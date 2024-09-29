@@ -6,13 +6,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 import requests
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 from dclogin.models import DiscordUser
 
 # Create your views here.
 
 auth_url_discord = "https://discord.com/oauth2/authorize?client_id=1243122055063408682&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Foauth2%2Flogin%2Fredirect&scope=identify"
-
 
 @login_required(login_url="/oauth2/login")
 def get_authenticated_user(request: HttpRequest):
@@ -47,7 +49,7 @@ def discord_login_redirect(request: HttpRequest):
 def exchange_code(code: str):
     data = {
         "client_id": "1243122055063408682",
-        "client_secret": "E7Hw7x2K1BeMfSPsGZJ1Luz6ffreG1LS",
+        "client_secret": os.environ.get('CLIENT_SECRET'),
         "grant_type": "authorization_code",
         "code": code,
         "redirect_uri": "http://localhost:8000/oauth2/login/redirect",
