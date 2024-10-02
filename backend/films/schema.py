@@ -3,6 +3,8 @@ import graphene
 from graphene_django import DjangoObjectType
 
 from .models import Film
+from dclogin.schema import UserType
+from django.contrib.auth.models import User
 
 
 class FilmType(DjangoObjectType):
@@ -21,19 +23,6 @@ class CreateFilm(graphene.Mutation):
     film = graphene.Field(FilmType)
 
     def mutate(self, info, title, year, director, description):
-        """
-        The mutate function is the function that will be called when a client
-        makes a request to this mutation. It takes in four arguments:
-        self, info, title and content. The first two are required by all mutations;
-        the last two are the arguments we defined in our CreatePostInput class.
-
-        :param self: Access the object's attributes and methods
-        :param info: Access the context of the request
-        :param title: Create a new film with the title provided
-        :param content: Pass the content of the film
-        :param author_id: Get the author object from the database
-        :return: A createpost object
-        """
         film = Film(title=title, year=year, director=director, description=description)
         film.save()
         return CreateFilm(film=film)
@@ -46,19 +35,6 @@ class DeleteFilm(graphene.Mutation):
     success = graphene.Boolean()
 
     def mutate(self, info, id):
-        """
-        The mutate function is the function that will be called when a client
-        calls this mutation. It takes in four arguments: self, info, id. The first
-        argument is the object itself (the class instance). The second argument is
-        information about the query context and user making this request. We don't
-        need to use it here so we'll just pass it along as-is to our model method.
-        The third argument is an ID of a film we want to delete.
-
-        :param self: Represent the instance of the class
-        :param info: Access the context of the query
-        :param id: Find the film that is to be deleted
-        :return: A deletepost object, which is the return type of the mutation
-        """
         try:
             film = Film.objects.get(pk=id)
         except Film.DoesNotExist:
@@ -67,24 +43,73 @@ class DeleteFilm(graphene.Mutation):
         film.delete()
         return DeleteFilm(success=True)
 
+class WannaWatchFilm(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+
+    status = graphene.String()
+    users_want_to_watch = graphene.List(UserType)
+    watchlist = graphene.List(FilmType)
+
+    def mutate(self, info, id):
+        user = info.context.user
+        if not user.is_authenticated:
+            raise Exception("Authentication required")
+
+        try:
+            film = Film.objects.get(pk=id)
+        except Film.DoesNotExist:
+            raise Exception("Film not found")
+
+        if user in film.want_to_watch.all():
+            film.want_to_watch.remove(user)
+        else:
+            film.want_to_watch.add(user)
+
+        users_want_to_watch = film.want_to_watch.all()
+        watchlist_films = user.films_to_watch.all()
+
+        return WannaWatchFilm(
+            status="success",
+            users_want_to_watch=users_want_to_watch,
+            watchlist=watchlist_films
+        )
+
 
 class Query(graphene.ObjectType):
     films = graphene.List(FilmType)
+    watched_films = graphene.List(FilmType)
+    added_films = graphene.List(FilmType)
+    watchlist = graphene.List(FilmType)
 
-    def resolve_posts(self, info):
-        """
-        The resolve_posts function is a resolver. It’s responsible for retrieving the posts from the database and returning them to GraphQL.
+    def resolve_films(self, info):
+        user = info.context.user
+        if not user.is_authenticated:
+            raise Exception("Authentication required")
+        return Film.objects.all().order_by("-created_at")
+    
+    def resolve_watched_films(self, info):
+        user = info.context.user
+        if not user.is_authenticated:
+            raise Exception("Authentication required")
+        return user.films_watched.all().order_by("-updated_at")
 
-        :param self: Refer to the current instance of a class
-        :param info: Pass along the context of the query
-        :return: All film objects from the database
-        """
-        return Film.objects.all()
+    def resolve_added_films(self, info):
+        user = info.context.user
+        if not user.is_authenticated:
+            raise Exception("Authentication required")
+        return user.films_added.all().order_by("-created_at")
 
+    def resolve_watchlist(self, info):
+        user = info.context.user
+        if not user.is_authenticated:
+            raise Exception("Authentication required")
+        return user.films_to_watch.all().order_by("-created_at")
+    
 
 class Mutation(graphene.ObjectType):
     create_post = CreateFilm.Field()
     delete_post = DeleteFilm.Field()
-
+    wanna_watch_film = WannaWatchFilm.Field()
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
