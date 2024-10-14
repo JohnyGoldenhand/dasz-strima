@@ -20,6 +20,7 @@ from django.contrib.auth.views import LogoutView
 from dclogin import views as dclogin_views
 from graphene_django.views import GraphQLView
 from daszstrima.schema import schema
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,5 +33,5 @@ urlpatterns = [
     path("auth/user/", dclogin_views.get_authenticated_user, name="get_authenticated_user"),
     path("logout/", LogoutView.as_view(next_page="/"), name="logout"),
 
-    path("graphql/", GraphQLView.as_view(graphiql=True, schema=schema)),
+    path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema))),
 ]
