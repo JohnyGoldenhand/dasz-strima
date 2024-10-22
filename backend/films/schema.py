@@ -53,9 +53,8 @@ class WannaWatchFilm(graphene.Mutation):
 
     def mutate(self, info, id):
         user = info.context.user
-        if not user.is_authenticated:
-            raise Exception("Authentication required")
-
+        # if not user.is_authenticated:
+            #raise Exception("Authentication required")
         try:
             film = Film.objects.get(pk=id)
         except Film.DoesNotExist:
@@ -84,26 +83,26 @@ class Query(graphene.ObjectType):
 
     def resolve_films(self, info):
         user = info.context.user
-        if not user.is_authenticated:
-            raise Exception("Authentication required")
+        # if not user.is_authenticated:
+           # raise Exception("Authentication required")
         return Film.objects.all().order_by("-created_at")
     
     def resolve_watched_films(self, info):
         user = info.context.user
-        if not user.is_authenticated:
-            raise Exception("Authentication required")
+        # if not user.is_authenticated:
+           # raise Exception("Authentication required")
         return user.films_watched.all().order_by("-updated_at")
 
     def resolve_added_films(self, info):
         user = info.context.user
-        if not user.is_authenticated:
-            raise Exception("Authentication required")
+        # if not user.is_authenticated:
+           # raise Exception("Authentication required")
         return user.films_added.all().order_by("-created_at")
 
     def resolve_watchlist(self, info):
         user = info.context.user
-        if not user.is_authenticated:
-            raise Exception("Authentication required")
+        # if not user.is_authenticated:
+           # raise Exception("Authentication required")
         return user.films_to_watch.all().order_by("-created_at")
     
 

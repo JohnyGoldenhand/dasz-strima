@@ -1,6 +1,6 @@
 from urllib import response
 from wsgiref import headers
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -71,4 +71,4 @@ def exchange_code(code: str):
 
 def logout_view(request):
     logout(request)
-    return HttpResponse("Logged out")
+    return HttpResponseRedirect("/")
