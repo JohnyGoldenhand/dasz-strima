@@ -20,10 +20,8 @@ auth_url_discord = "https://discord.com/oauth2/authorize?client_id=1243122055063
 def get_authenticated_user(request: HttpRequest):
     return JsonResponse({"msg": f"Authenticated user: {request.user.username}"})
 
-
 def discord_login(request: HttpRequest):
     return redirect(auth_url_discord)
-
 
 def discord_login_redirect(request: HttpRequest):
     code = request.GET.get("code")
@@ -44,7 +42,6 @@ def discord_login_redirect(request: HttpRequest):
         normal_user = users.first()
     login(request, normal_user)
     return redirect("/auth/user")
-
 
 def exchange_code(code: str):
     data = {
@@ -67,7 +64,6 @@ def exchange_code(code: str):
     )
     user = response.json()
     return user
-
 
 def logout_view(request):
     logout(request)
