@@ -1,32 +1,11 @@
-import {getClient} from "@/lib/client";
-import {gql} from "@apollo/client";
+import {Container} from "@/components/Container";
 
-const query = gql`query Hello {
-    films {
-        id
-        title
-        year
-        director
-    }
-}`;
-
-
-export default async function Home() {
-
-
-    const {data} = await getClient().query({
-        query,
-        context: {
-            fetchOptions: {
-                next: {revalidate: 5},
-            },
-        },
-    });
-
-    console.log(data);
-
+export default function Home() {
     return (
-        <div className="bg-slate-700 min-h-[100vh]">
-        </div>
+        <main>
+            <Container>
+                <h1>Dasz strima</h1>
+            </Container>
+        </main>
     );
 }

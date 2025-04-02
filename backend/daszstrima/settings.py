@@ -59,9 +59,15 @@ MIDDLEWARE = [
 LOGOUT_REDIRECT_URL = '/'
 
 CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://localhost:3000",
 ]
+
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000", "http://localhost:3000"]
+
+CSRF_COOKIE_HTTPONLY = False  # Allows JavaScript to access the CSRF cookie
+CSRF_COOKIE_SECURE = False  # Use True in production if using HTTPS
 
 ROOT_URLCONF = 'daszstrima.urls'
 
