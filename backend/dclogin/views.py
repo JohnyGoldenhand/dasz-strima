@@ -57,7 +57,6 @@ def exchange_code(code: str):
         "https://discord.com/api/oauth2/token", data=data, headers=headers
     )
     credentials = response.json()
-    print("credki:",credentials)
     access_token = credentials["access_token"]
     response = requests.get(
         "https://discord.com/api/users/@me",
