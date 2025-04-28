@@ -4,7 +4,7 @@ import {getAuthenticatedUser} from "@/lib/queries";
 
 export default async function UserPage() {
     const user = await getAuthenticatedUser();
-
+    console.log(user)
     if (!user) {
         return <LoginDiscordButton/>;
     }

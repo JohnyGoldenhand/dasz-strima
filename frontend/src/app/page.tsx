@@ -1,9 +1,11 @@
 import {Container} from "@/components/Container";
-import {getPopularMovies} from "@/lib/queries";
+import {getMoviesFromDB, getPopularMovies} from "@/lib/queries";
 import {MovieCarousel} from "@/components/MovieCarousel";
+import {DBMovie} from "@/lib/types";
 
 export default async function Home() {
     const popularMovies = await getPopularMovies();
+    const testMovies: DBMovie[] = await getMoviesFromDB()
 
     return (
         <main>

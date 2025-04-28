@@ -1,4 +1,4 @@
-import {Movie} from "@/lib/types";
+import {Movie, DBMovie} from "@/lib/types";
 
 /**
  * Fetches popular movies from The Movie Database API
@@ -60,10 +60,10 @@ export async function getMovie(id: number): Promise<Movie | null> {
 
 export const getAuthenticatedUser = async () => {
     // Use localhost instead of 127.0.0.1 to ensure consistency with how the user accesses the site
-    const url = 'http://localhost:8000/auth/user/';
+    const url = 'http://127.0.0.1:8000/auth/user/';
+
 
     // Check if we're running on the server or client
-    const isServer = typeof window === 'undefined';
 
     // For server-side requests, we need to use the 'next' option
     // to prevent caching and ensure fresh data
@@ -74,7 +74,7 @@ export const getAuthenticatedUser = async () => {
         },
         credentials: 'include' as RequestCredentials, // Include cookies in the request
         cache: 'no-store' as RequestCache, // Don't cache this request
-        ...(isServer ? { next: { revalidate: 0 } } : {}) // For server components
+        next: {revalidate: 0}
     };
 
     try {
@@ -96,3 +96,30 @@ export const getAuthenticatedUser = async () => {
         return null;
     }
 }
+
+export const getMoviesFromDB = async (): Promise<DBMovie[]> => {
+    const url = 'http://127.0.0.1:8000/api/films/';
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+        },
+        next: {revalidate: 3600},
+        // cache: 'no-store' as RequestCache // Disable caching
+    };
+
+    try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        return data || [];
+    } catch (error: any) {
+        console.error('Error fetching movies from database:', error);
+        return [];
+    }
+};
+
+
+

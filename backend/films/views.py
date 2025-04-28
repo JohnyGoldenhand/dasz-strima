@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from .models import Film
 
+
 class FilmReadSerializer(serializers.ModelSerializer):
     # added_by wyswietla nazwe usera a nie ID
     # added_by = serializers.SlugRelatedField(
@@ -16,15 +17,17 @@ class FilmReadSerializer(serializers.ModelSerializer):
         model = Film
         fields = '__all__'
 
+
 class FilmWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Film
         fields = ['title', 'year', 'director', 'description', 'category']
 
+
 # Widok API
 class FilmViewSet(viewsets.ModelViewSet):
     queryset = Film.objects.all().order_by('-created_at')
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
 
     def get_serializer_class(self):
         if self.action in ['create', 'update', 'partial_update']:
@@ -57,7 +60,7 @@ class FilmViewSet(viewsets.ModelViewSet):
         film.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(detail=True, methods=['put','get'])
+    @action(detail=True, methods=['put', 'get'])
     def wanna_watch(self, request, pk=None):
         film = get_object_or_404(Film, pk=pk)
         user = request.user
@@ -73,7 +76,7 @@ class FilmViewSet(viewsets.ModelViewSet):
             'watchlist': [f.id for f in user.films_to_watch.all()]
         })
 
-    @action(detail=True, methods=['put','get'])
+    @action(detail=True, methods=['put', 'get'])
     def already_watched(self, request, pk=None):
         film = get_object_or_404(Film, pk=pk)
         user = request.user
@@ -88,4 +91,3 @@ class FilmViewSet(viewsets.ModelViewSet):
             'users_that_watched': [u.id for u in film.watched.all()],
             'watched': [f.id for f in user.films_watched.all()]
         })
-    

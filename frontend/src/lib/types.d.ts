@@ -6,3 +6,17 @@ export interface Movie {
     vote_average: number;
     overview: string;
 }
+
+export interface DBMovie {
+    id: number;
+    title: string;
+    year: number;
+    director: string;
+    description: string;
+    category: string;
+    created_at: string;
+    updated_at: string;
+    added_by: number;
+    want_to_watch: number[];
+    watched: number[];
+}
