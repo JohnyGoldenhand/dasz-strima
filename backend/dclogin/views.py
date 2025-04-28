@@ -8,7 +8,6 @@ from django.contrib.auth.models import User
 import requests
 from dotenv import load_dotenv
 import os
-
 load_dotenv()
 
 from dclogin.models import DiscordUser
