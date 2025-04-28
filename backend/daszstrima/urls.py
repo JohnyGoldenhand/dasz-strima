@@ -29,7 +29,7 @@ urlpatterns = [
     ),
     path("auth/user/", dclogin_views.get_authenticated_user, name="get_authenticated_user"),
     path("logout/", LogoutView.as_view(next_page="/"), name="logout"),
-
-    # path("api/", include("films.urls")),
-    # path("api/", include("ratings.urls"))
+    
+    path("api/", include("films.urls")),
+    path("api/", include("ratings.urls"))
 ]

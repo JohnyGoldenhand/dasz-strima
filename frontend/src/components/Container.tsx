@@ -1,8 +1,8 @@
 import type {PropsWithChildren} from "react";
-import {cn} from "@/lib/utils";
+import classNames from "classnames";
 
 export const Container = ({children, className}: PropsWithChildren<{ className?: string }>) => (
-    <div className={cn(`max-w-[1440px] mx-auto`, className)}>
+    <div className={classNames(`max-w-[1440px] mx-auto`, className)}>
         {children}
     </div>
 )
