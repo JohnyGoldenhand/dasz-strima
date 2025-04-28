@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 import requests
 from dotenv import load_dotenv
 import os
+
 load_dotenv()
 
 from dclogin.models import DiscordUser
@@ -16,12 +17,39 @@ from dclogin.models import DiscordUser
 
 auth_url_discord = "https://discord.com/oauth2/authorize?client_id=1243122055063408682&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000%2Foauth2%2Flogin%2Fredirect&scope=identify"
 
-@login_required(login_url="/oauth2/login")
+
 def get_authenticated_user(request: HttpRequest):
-    return JsonResponse({"msg": f"Authenticated user: {request.user.username}"})
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            "authenticated": False,
+            "username": None,
+            "discord_username": None,
+            "discord_id": None,
+            "avatar": None
+        })
+
+    try:
+        discord_user = DiscordUser.objects.get(user_id=request.user)
+        return JsonResponse({
+            "authenticated": True,
+            "username": request.user.username,
+            "discord_username": discord_user.discord_username,
+            "discord_id": discord_user.discord_id,
+            "avatar": discord_user.avatar
+        })
+    except DiscordUser.DoesNotExist:
+        return JsonResponse({
+            "authenticated": True,
+            "username": request.user.username,
+            "discord_username": request.user.username,
+            "discord_id": "",
+            "avatar": ""
+        })
+
 
 def discord_login(request: HttpRequest):
     return redirect(auth_url_discord)
+
 
 def discord_login_redirect(request: HttpRequest):
     code = request.GET.get("code")
@@ -42,6 +70,7 @@ def discord_login_redirect(request: HttpRequest):
         normal_user = users.first()
     login(request, normal_user)
     return redirect("/auth/user")
+
 
 def exchange_code(code: str):
     data = {
@@ -64,6 +93,7 @@ def exchange_code(code: str):
     )
     user = response.json()
     return user
+
 
 def logout_view(request):
     logout(request)
