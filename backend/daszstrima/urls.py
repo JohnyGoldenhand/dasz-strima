@@ -16,8 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth.views import LogoutView
 from dclogin import views as dclogin_views
+from dclogin.views import logout_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +28,7 @@ urlpatterns = [
         name="discord_login_redirect",
     ),
     path("auth/user/", dclogin_views.get_authenticated_user, name="get_authenticated_user"),
-    path("logout/", LogoutView.as_view(next_page="/"), name="logout"),
+    path("logout/", logout_view, name="logout"),
     
     path("api/", include("films.urls")),
     path("api/", include("ratings.urls"))
