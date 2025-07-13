@@ -2,10 +2,16 @@ import {getMovie} from "@/lib/queries";
 import {notFound} from "next/navigation";
 import {Container} from "@/components/Container";
 import Image from "next/image";
+import {currentUser} from '@clerk/nextjs/server';
+import {MovieRating} from "@/components/MovieRating";
 
 export default async function MoviePage({params}: { params: { id: string } }) {
-    const movieId = parseInt(params.id, 10)
+
+    const awaitedParams = await params;
+
+    const movieId = parseInt(awaitedParams.id, 10)
     const movie = await getMovie(movieId)
+    const user = await currentUser();
 
     if (!movie) {
         return notFound()
@@ -24,6 +30,12 @@ export default async function MoviePage({params}: { params: { id: string } }) {
                         <p>{movie.overview}</p>
                         <p>Release Date: {movie.release_date}</p>
                         <p>Rating: {movie.vote_average}</p>
+
+                        {user && (
+                            <div className="mt-6 p-4 border rounded-md bg-accent/20">
+                                <MovieRating movieId={movieId}/>
+                            </div>
+                        )}
                     </div>
                 </div>
             </Container>

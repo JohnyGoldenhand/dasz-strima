@@ -8,13 +8,30 @@ const nextConfig: NextConfig = {
         MOVIEDB_IMAGE_URL: process.env.MOVIEDB_IMAGE_URL,
     },
     images: {
-        remotePatterns: [{
-            protocol: 'https',
-            hostname: 'image.tmdb.org',
-            port: '',
-            pathname: '/**',
-            search: '',
-        },],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'image.tmdb.org',
+                port: '',
+                pathname: '/**',
+                search: '',
+            },
+            {
+                protocol: 'https',
+                hostname: 'img.clerk.dev',
+                port: '',
+                pathname: '/**',
+                search: '',
+            },
+            {
+                protocol: 'https',
+                hostname: 'img.clerk.com',
+                port: '',
+                pathname: '/**',
+                search: '',
+            }
+        ],
+
     },
 
 };

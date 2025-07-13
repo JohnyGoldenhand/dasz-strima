@@ -61,3 +61,9 @@ class RatingViewSet(viewsets.ModelViewSet):
         ratings = Rating.objects.filter(film_id=film_id)
         serializer = self.get_serializer(ratings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='user')
+    def user_ratings(self, request):
+        ratings = Rating.objects.filter(user=request.user).order_by('-created_at')
+        serializer = self.get_serializer(ratings, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

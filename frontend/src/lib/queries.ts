@@ -1,4 +1,4 @@
-import {Movie, DBMovie} from "@/lib/types";
+import {Movie, DBMovie, Rating} from "@/lib/types";
 
 /**
  * Fetches popular movies from The Movie Database API
@@ -121,5 +121,57 @@ export const getMoviesFromDB = async (): Promise<DBMovie[]> => {
     }
 };
 
+export const getMovieFromDB = async (id: number): Promise<DBMovie | null> => {
+    const url = `http://127.0.0.1:8000/api/films/${id}/`;
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+        },
+        next: {revalidate: 3600},
+    };
 
+    try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            if (response.status === 404) {
+                return null; // Movie not found
+            }
+            throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        return data || null;
+    } catch (error: any) {
+        console.error('Error fetching movie from database:', error);
+        return null;
+    }
+};
 
+/**
+ * Fetches all ratings for the current user
+ * @param token - The authentication token from Clerk
+ * @returns Promise<Rating[]> Array of user ratings
+ */
+export const getUserRatings = async (token: string): Promise<Rating[]> => {
+    const url = 'http://127.0.0.1:8000/api/ratings/user/';
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        next: {revalidate: 0} // Don't cache this request
+    };
+
+    try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        return data || [];
+    } catch (error: any) {
+        console.error('Error fetching user ratings:', error);
+        return [];
+    }
+};

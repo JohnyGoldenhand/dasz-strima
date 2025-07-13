@@ -20,3 +20,12 @@ export interface DBMovie {
     want_to_watch: number[];
     watched: number[];
 }
+
+export interface Rating {
+    id: number;
+    user: number;
+    film: number;
+    rating: number;
+    created_at: string;
+    updated_at: string;
+}

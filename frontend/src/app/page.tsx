@@ -1,15 +1,16 @@
 import {Container} from "@/components/Container";
-import {getMoviesFromDB, getPopularMovies} from "@/lib/queries";
+import {getPopularMovies} from "@/lib/queries";
 import {MovieCarousel} from "@/components/MovieCarousel";
-import {DBMovie} from "@/lib/types";
+import {Hero} from "@/components/Hero";
 
 export default async function Home() {
     const popularMovies = await getPopularMovies();
-    const testMovies: DBMovie[] = await getMoviesFromDB()
 
     return (
         <main>
-            <Container>
+            {/* Hero section with the first popular movie */}
+            <Hero/>
+            <Container className={"py-8"}>
                 <div className="mt-8">
                     <MovieCarousel movies={popularMovies} label={"Popular Movies"}/>
                 </div>

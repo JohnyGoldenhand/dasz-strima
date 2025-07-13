@@ -1,6 +1,6 @@
 import {ThemeToggler} from "@/components/ThemeToggler";
 import {Container} from "@/components/Container";
-import {LoginDiscordButton} from "@/components/Navigation/LoginDiscordButton";
+import {ClerkLoginButton} from "@/components/Navigation/ClerkLoginButton";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import {User} from "lucide-react";
@@ -16,7 +16,7 @@ export const Navigation = () => {
                     Dasz strima
                 </Link>
                 <div className={"flex gap-4 items-center"}>
-                    <LoginDiscordButton/>
+                    <ClerkLoginButton/>
                     <ThemeToggler/>
                 </div>
             </Container>

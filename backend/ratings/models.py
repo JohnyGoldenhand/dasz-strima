@@ -8,9 +8,7 @@ class Rating(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="user_ratings"
     )
-    film = models.ForeignKey(
-        "films.Film", on_delete=models.CASCADE, related_name="film_ratings"
-    )
+    film = models.IntegerField()  # Store the movie ID from TheMovieDB directly
     rating = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(10)]
     )

@@ -45,6 +45,15 @@ INSTALLED_APPS = [
     'ratings',
 ]
 
+# REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'dclogin.clerk_auth.ClerkAuthentication',  # Add Clerk authentication
+    ],
+    # Other settings...
+}
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
