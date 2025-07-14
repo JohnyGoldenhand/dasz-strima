@@ -1,22 +1,16 @@
 import {ThemeToggler} from "@/components/ThemeToggler";
 import {Container} from "@/components/Container";
-import {ClerkLoginButton} from "@/components/Navigation/ClerkLoginButton";
-import Link from "next/link";
-import {Button} from "@/components/ui/button";
-import {User} from "lucide-react";
 
 
 export const Navigation = () => {
 
 
     return (
-        <nav className={"sticky top-0 left-0 bg-accent shadow-md z-10"}>
-            <Container className={"flex justify-between items-center py-4"}>
-                <Link href="/" className={"text-xl font-bold hover:text-primary"}>
-                    Dasz strima
-                </Link>
+        <nav className={"sticky top-0 left-0 bg-gradient-to-r from-transparent to-accent shadow-md z-10"}>
+            <Container className={"flex justify-around items-center py-4"}>
+                <input type={"search"} placeholder={"Search"}
+                       className={"w-2xl bg-slate-300 px-4 py-2 text-slate-950 rounded-2xl overflow-hidden"}/>
                 <div className={"flex gap-4 items-center"}>
-                    <ClerkLoginButton/>
                     <ThemeToggler/>
                 </div>
             </Container>

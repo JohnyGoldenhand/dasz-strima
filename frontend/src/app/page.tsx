@@ -8,12 +8,8 @@ export default async function Home() {
 
     return (
         <main>
-            {/* Hero section with the first popular movie */}
-            <Hero/>
             <Container className={"py-8"}>
-                <div className="mt-8">
-                    <MovieCarousel movies={popularMovies} label={"Popular Movies"}/>
-                </div>
+
             </Container>
         </main>
     );
