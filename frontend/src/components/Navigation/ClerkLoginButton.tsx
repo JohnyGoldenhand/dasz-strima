@@ -20,6 +20,7 @@ export const ClerkLoginButton = () => {
                 <SignedIn>
                     <div className={"flex gap-4"}>
                         <UserButton/>
+                        
                         <Link href={"/user"}
                               className={"flex p-2 rounded-lg bg-slate-700 hover:bg-slate-600 cursor-pointer transition-all "}>
                             <User/>
